@@ -120,7 +120,7 @@ NOTES:
  *   Rating: 1
  */
 int bitAnd(int x, int y) {
-  return 2;
+  return ~(~x|~y);
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -130,7 +130,7 @@ int bitAnd(int x, int y) {
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+  return ~(~(x&~y)&~(~x&y));
 }
 /* 
  * thirdBits - return word with every third bit (starting from the LSB) set to 1
@@ -140,7 +140,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int thirdBits(void) {
-  return 2;
+  return 73 | 73 << 9 |73<<18|73<<27;
 }
 // Rating: 2
 /* 
@@ -153,7 +153,17 @@ int thirdBits(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+/*
+int TMin_n = ~(1 << (n+~1+1))+1;
+int TMax_n = (1 << (n-1)) - 1;
+int boo1 = x - TMin_n;
+int boo2 =  x - TMax_n;
+int t =( boo1>>31) |(boo2>>31);
+
+int pos = (!(x>>(n+~1+1)));
+int neg = (!(~(x>>n)));
+*/
+ return 2;
 }
 /* 
  * sign - return 1 if positive, 0 if zero, and -1 if negative
@@ -164,7 +174,10 @@ int fitsBits(int x, int n) {
  *  Rating: 2
  */
 int sign(int x) {
-  return 2;
+  int sign = x>>31;
+ int n = !(!x);
+int res = sign | n;
+  return res;
 }
 /* 
  * getByte - Extract byte n from word x
@@ -175,7 +188,7 @@ int sign(int x) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return 2;
+  return 255&(((0xff<<(n<<3))&x)>>(n<<3));
 }
 // Rating: 3
 /* 
@@ -187,7 +200,9 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-  return 2;
+	
+ return (x>>n)&(~((~0)<<(32+(~n+1))));
+
 }
 /* 
  * addOK - Determine if can compute x+y without overflow
@@ -197,8 +212,12 @@ int logicalShift(int x, int n) {
  *   Max ops: 20
  *   Rating: 3
  */
-int addOK(int x, int y) {
-  return 2;
+int addOK(int x, int y) {    
+    int t = x + y;
+	int signx =  !(!(x >> 31));
+	int signy = !(!(y>>31));
+	int signt = !(!(t>>31));
+  return !((signx&signy&(!signt)) | ((!signx)&(!signy)&signt)) ;
 }
 // Rating: 4
 /* 
@@ -209,7 +228,13 @@ int addOK(int x, int y) {
  *   Rating: 4 
  */
 int bang(int x) {
+
+   
+
   return 2;
+
+
+
 }
 // Extra Credit: Rating: 3
 /* 
@@ -220,7 +245,9 @@ int bang(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+int  boola = !(!x);
+int mask =(boola<<31)>>31;
+return (mask&y)|(~mask&z);
 }
 // Extra Credit: Rating: 4
 /*
