@@ -153,17 +153,10 @@ int thirdBits(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-/*
-int TMin_n = ~(1 << (n+~1+1))+1;
-int TMax_n = (1 << (n-1)) - 1;
-int boo1 = x - TMin_n;
-int boo2 =  x - TMax_n;
-int t =( boo1>>31) |(boo2>>31);
-
-int pos = (!(x>>(n+~1+1)));
-int neg = (!(~(x>>n)));
-*/
- return 2;
+int min = (1 << n) ;
+int max = 1 << n + (~0);
+int sgn = !!(x>>31);
+ return (!sgn&(!!(max +~x+1)>>31)) | (sgn&( !!((min+~x+1)>>31)));
 }
 /* 
  * sign - return 1 if positive, 0 if zero, and -1 if negative
