@@ -1,0 +1,5 @@
+file ./bufbomb
+b getbuf
+b *0x0000000000400e19
+r -u 862666 < exploit.bytes
+
